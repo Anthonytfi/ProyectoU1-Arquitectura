@@ -1,47 +1,47 @@
-http://localhost:3000/api/profesor/procesar-notas
-
-{
-  "estudiantes": [
-    {
-      "nombre": "Anthony Mejia",
-      "materia": "Arquitectura de Software",
-      "nota1": 8.0,
-      "nota2": 7.5,
-      "nota3": 9.0
-    },
-    {
-      "nombre": "Jordan Guevara",
-      "materia": "Arquitectura de Software",
-      "nota1": 5.0,
-      "nota2": 6.0,
-      "nota3": 4.5
-    }
-  ]
-}
-
-
+*Ingresar un usuario*
 http://localhost:3000/api/admin/procesar-usuarios
 
 {
   "usuarios": [
     {
-      "nombre": "  Ana lopez  ",
-      "correo": " ANA@correo.com ",
-      "rol": "profesor"
+      "nombre": "Jordan Guevara",
+      "correo": "jordan@correo.com",
+      "rol": "ESTUDIANTE"
     },
     {
-      "nombre": "Carlos Perez",
-      "correo": "carlos@correo.com"
+      "nombre": "Anthony Mejia",
+      "correo": "anthony@correo.com",
+      "rol": "PROFESOR"
     }
   ]
 }
 
+*Ingresar notas con ID*
+http://localhost:3000/api/profesor/procesar-notas
 
+{
+  "estudiantes": [
+    {
+      "idUsuario": 1,
+      "materia": "Arquitectura de Software",
+      "nota1": 8.5,
+      "nota2": 9.0,
+      "nota3": 10.0
+    },
+    {
+      "idUsuario": 1,
+      "materia": "Base de Datos",
+      "nota1": 7.0,
+      "nota2": 8.0,
+      "nota3": 6.5
+    }
+  ]
+}
+
+*VIsualizar notas por ID*
 http://localhost:3000/api/estudiante/consultar
 
 {
-  "nombreEstudiante": "Anthony Mejia"
-  
+  "idUsuario": 1
 }
-
 
