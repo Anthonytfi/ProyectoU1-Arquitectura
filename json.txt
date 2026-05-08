@@ -1,0 +1,47 @@
+http://localhost:3000/api/profesor/procesar-notas
+
+{
+  "estudiantes": [
+    {
+      "nombre": "Anthony Mejia",
+      "materia": "Arquitectura de Software",
+      "nota1": 8.0,
+      "nota2": 7.5,
+      "nota3": 9.0
+    },
+    {
+      "nombre": "Jordan Guevara",
+      "materia": "Arquitectura de Software",
+      "nota1": 5.0,
+      "nota2": 6.0,
+      "nota3": 4.5
+    }
+  ]
+}
+
+
+http://localhost:3000/api/admin/procesar-usuarios
+
+{
+  "usuarios": [
+    {
+      "nombre": "  Ana lopez  ",
+      "correo": " ANA@correo.com ",
+      "rol": "profesor"
+    },
+    {
+      "nombre": "Carlos Perez",
+      "correo": "carlos@correo.com"
+    }
+  ]
+}
+
+
+http://localhost:3000/api/estudiante/consultar
+
+{
+  "nombreEstudiante": "Anthony Mejia"
+  
+}
+
+
