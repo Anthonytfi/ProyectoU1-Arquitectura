@@ -5,7 +5,7 @@ const {
     FiltroValidacion, 
     FiltroPromedio, 
     FiltroEstado, 
-    FiltroGuardarNotasBDD 
+    FiltroGuardarNotasBDD
 } = require('../filters/profesor/filtrosProfesor');
 
 // 1. Lógica para GUARDAR notas 
@@ -30,7 +30,6 @@ const procesarNotas = async (req, res) => {
     }
 };
 
-// 2. Lógica para CONSULTAR notas de un estudiante específico 
 const consultarEstudiante = async (req, res) => {
     try {
         const { idUsuario } = req.body;
@@ -39,7 +38,6 @@ const consultarEstudiante = async (req, res) => {
             return res.status(400).json({ error: "Falta el idUsuario en la petición" });
         }
 
-        // Buscamos al usuario y sus notas con un JOIN
         const query = `
             SELECT u.nombre, u.correo, n.materia, n.nota1, n.nota2, n.nota3, n.promedio, n.estado
             FROM usuarios u
@@ -74,8 +72,8 @@ const consultarEstudiante = async (req, res) => {
     }
 };
 
-// Exportamos ambas funciones
+
 module.exports = { 
     procesarNotas, 
-    consultarEstudiante 
+    consultarEstudiante
 };

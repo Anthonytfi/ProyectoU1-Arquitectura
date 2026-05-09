@@ -4,5 +4,4 @@ const profesorController = require('../controllers/profesorController');
 
 router.post('/procesar-notas', profesorController.procesarNotas);
 router.post('/consultar-estudiante', profesorController.consultarEstudiante);
-
 module.exports = router;

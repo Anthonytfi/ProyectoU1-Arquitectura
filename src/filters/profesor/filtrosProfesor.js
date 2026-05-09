@@ -158,5 +158,5 @@ module.exports = {
     FiltroValidacion, 
     FiltroPromedio, 
     FiltroEstado, 
-    FiltroGuardarNotasBDD 
+    FiltroGuardarNotasBDD
 };
