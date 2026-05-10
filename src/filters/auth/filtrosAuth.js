@@ -1,4 +1,5 @@
 const { pool } = require('../../config/db');
+const bcrypt = require('bcrypt');  // 👈 LÍNEA OBLIGATORIA
 
 class FiltroVerificarCredenciales {
     async ejecutar(datos) {
@@ -19,14 +20,19 @@ class FiltroVerificarCredenciales {
             }
             
             const usuario = result.rows[0];
-            if (usuario.password !== password) {
+            
+            // 👈 Usar bcrypt.compare
+            const passwordValida = await bcrypt.compare(password, usuario.password);
+            
+            if (!passwordValida) {
                 return { 
                     ...datos, 
                     error: "Contraseña incorrecta",
                     errorCritico: true 
                 };
             }
-            const primerLogin = usuario.password.startsWith('temp_');
+            
+            const primerLogin = password.startsWith('temp_');
             
             return {
                 ...datos,
@@ -52,10 +58,11 @@ class FiltroGenerarToken {
         console.log("-> Generando token de sesión...");
         
         if (datos.error) return datos;
+        
         const token = Buffer.from(JSON.stringify({
             id: datos.usuario.id,
             rol: datos.usuario.rol,
-            exp: Date.now() + 24 * 60 * 60 * 1000 
+            exp: Date.now() + 24 * 60 * 60 * 1000
         })).toString('base64');
         
         return { ...datos, token };
