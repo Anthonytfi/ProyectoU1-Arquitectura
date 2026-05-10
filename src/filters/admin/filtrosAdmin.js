@@ -1,4 +1,5 @@
 const { pool } = require('../../config/db');
+const bcrypt = require('bcrypt');
 
 class FiltroLimpieza {
     ejecutar(datos) {
@@ -26,12 +27,19 @@ class FiltroValidacionExistencia {
 }
 
 class FiltroGenerarPassword {
-    ejecutar(datos) {
-        console.log("-> Generando contraseñas temporales...");
-        return datos.map(u => {
+    async ejecutar(datos) {
+        console.log("-> Generando y cifrando contraseñas...");
+        const saltRounds = 10; 
+
+        return await Promise.all(datos.map(async (u) => {
             if (u.error) return u;
-            return { ...u, password: `temp_${u.nombre.split(' ')[0]}123` };
-        });
+
+            const passwordTemporal = `temp_${u.nombre.split(' ')[0]}123`;
+            
+            const hash = await bcrypt.hash(passwordTemporal, saltRounds);
+
+            return { ...u, password: hash, passwordPlana: passwordTemporal }; 
+        }));
     }
 }
 
