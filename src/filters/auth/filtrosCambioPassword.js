@@ -1,4 +1,5 @@
 const { pool } = require('../../config/db');
+const bcrypt = require('bcrypt');  // 👈 Agregar esta línea
 
 class FiltroValidarUsuarioExistente {
     async ejecutar(datos) {
@@ -31,14 +32,17 @@ class FiltroValidarUsuarioExistente {
 }
 
 class FiltroValidarPasswordActual {
-    ejecutar(datos) {
+    async ejecutar(datos) {  // 👈 Agregar 'async'
         console.log("-> Validando contraseña actual...");
         
         if (datos.error) return datos;
         
         const { password_actual, passwordActualBDD } = datos;
         
-        if (password_actual !== passwordActualBDD) {
+        // 👈 Usar bcrypt.compare
+        const passwordValida = await bcrypt.compare(password_actual, passwordActualBDD);
+        
+        if (!passwordValida) {
             return { 
                 ...datos, 
                 error: "Contraseña actual incorrecta",
@@ -56,8 +60,8 @@ class FiltroValidarNuevaPassword {
         
         if (datos.error) return datos;
         
-        const { password_nueva } = datos;
-
+        const { password_nueva, password_actual } = datos;
+        
         if (password_nueva.length < 8) {
             return { ...datos, error: "La contraseña debe tener al menos 8 caracteres", errorCritico: true };
         }
@@ -74,7 +78,7 @@ class FiltroValidarNuevaPassword {
             return { ...datos, error: "La contraseña debe tener al menos un carácter especial (!@#$%^&*)", errorCritico: true };
         }
         
-        if (password_nueva === datos.password_actual) {
+        if (password_nueva === password_actual) {
             return { ...datos, error: "La nueva contraseña debe ser diferente a la actual", errorCritico: true };
         }
         
@@ -91,8 +95,12 @@ class FiltroActualizarPassword {
         try {
             const { idUsuario, password_nueva } = datos;
             
+            // 👈 Generar hash de la nueva contraseña
+            const saltRounds = 10;
+            const hash = await bcrypt.hash(password_nueva, saltRounds);
+            
             const query = 'UPDATE usuarios SET password = $1 WHERE id = $2 RETURNING id';
-            const result = await pool.query(query, [password_nueva, idUsuario]);
+            const result = await pool.query(query, [hash, idUsuario]);
             
             if (result.rows.length === 0) {
                 return { ...datos, error: "Error al actualizar contraseña", errorCritico: true };
@@ -105,6 +113,7 @@ class FiltroActualizarPassword {
             };
             
         } catch (error) {
+            console.error("Error en FiltroActualizarPassword:", error);
             return { ...datos, error: "Error en el servidor", errorCritico: true };
         }
     }
