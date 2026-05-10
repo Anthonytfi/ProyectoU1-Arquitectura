@@ -1,5 +1,5 @@
 const { pool } = require('../../config/db');
-const bcrypt = require('bcrypt');  // 👈 LÍNEA OBLIGATORIA
+const bcrypt = require('bcrypt'); 
 
 class FiltroVerificarCredenciales {
     async ejecutar(datos) {
